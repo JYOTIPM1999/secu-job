@@ -1,9 +1,10 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
-import mongoose from "mongoose";
 import authRoutes from "./routes/auth.js";
+import jobsRoutes from "./routes/jobs.js";
 import helmet from "helmet";
+import connectDB from "./db.js";
 
 dotenv.config();
 
@@ -17,6 +18,7 @@ app.use(express.json());
 
 // Routes
 app.use("/api/auth", authRoutes);
+app.use("/api/jobs", jobsRoutes); // Protected jobs routes
 app.get("/", (req, res) => {
   res.send("Job board Backend");
 });
@@ -27,14 +29,8 @@ app.use((err, req, res, next) => {
   res.status(500).send("Something broke!");
 });
 
-mongoose
-  .connect(process.env.MONGO_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
-  .then(() => console.log("MongoDB Connected"))
-  .catch((err) => console.log("MongoDB connection error:", err));
+connectDB();
 
 app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+  console.log(`Nodejs Server is running on port ${PORT}`);
 });

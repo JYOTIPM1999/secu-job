@@ -2,6 +2,7 @@ import express from "express";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 import User from "../models/User.js";
+import authMiddleware from "../middleware/auth.js";
 
 const router = express.Router();
 
@@ -45,5 +46,7 @@ router.post("/login", async (req, red) => {
     res.status(500).json({ message: error.message });
   }
 });
-
+router.post("/logout", authMiddleware, (req, res) => {
+  res.json({ msg: "Logged out successfully" });
+});
 export default router;
